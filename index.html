@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INEXORABLE HUNT Ultimate Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginPage">
+    <div class="login-box">
+      <h2>Login</h2>
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+      <button onclick="login()">Login</button>
+      <p id="error"></p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <h1>INEXORABLE HUNT</h1>
+    <p id="welcomeText"></p>
+    <div id="adminControls">
+      <button onclick="showAddPlayerModal()">➕ Add Player</button>
+      <button onclick="showAddSlotModal()">🎟 Add Slot Purchase</button>
+      <button onclick="showAddEarnModal()">💰 Add InGame Earn</button>
+      <button onclick="logout()" style="background: #f00; color: #fff;">🚪 Logout</button>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="cards">
+      <div class="card">
+        <h3>Total Fund</h3><span id="totalFund">0</span>৳
+      </div>
+      <div class="card">
+        <h3>Total Players</h3><span id="totalPlayers">0</span>
+      </div>
+      <div class="card">
+        <h3>Total Match</h3><span id="totalMatch">0</span>
+      </div>
+      <div class="card">
+        <h3>Player Fund</h3><span id="playerFund">0</span>৳
+      </div>
+      <div class="card">
+        <h3>Slot Purchase</h3><span id="slotPurchase">0</span>৳
+      </div>
+      <div class="card">
+        <h3>InGame Earning</h3><span id="ingameEarning">0</span>৳
+      </div>
+    </div>
+
+    <!-- Total Players Table -->
+    <h2>Total Players</h2>
+    <div class="table-container">
+      <table id="playerTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>District</th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Profession</th>
+            <th>Total Fund</th>
+            <th>Total Match</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- History Table -->
+    <h2>All History</h2>
+    <div class="table-container">
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Player</th>
+            <th>Amount</th>
+            <th>Details</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== Modals ===== -->
+
+  <!-- Add Player Modal -->
+  <div id="playerModal" class="modal">
+    <form onsubmit="addPlayer(event)">
+      <h3>Add Player</h3>
+      <input type="text" id="pName" placeholder="Name" required>
+      <select id="pDistrict" required>
+        <option value="">Select District</option>
+        <option value="Dhaka">Dhaka</option>
+        <option value="Chattogram">Chattogram</option>
+        <option value="Khulna">Khulna</option>
+        <option value="Barishal">Barishal</option>
+        <option value="Sylhet">Sylhet</option>
+        <option value="Rangpur">Rangpur</option>
+        <option value="Mymensingh">Mymensingh</option>
+        <option value="Rajshahi">Rajshahi</option>
+      </select>
+      <select id="pGender" required>
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <input type="number" id="pAge" placeholder="Age" required>
+      <select id="pProfession" required>
+        <option value="">Select Profession</option>
+        <option value="Job">Job</option>
+        <option value="Gamer">Gamer</option>
+        <option value="Student">Student</option>
+        <option value="Influencer">Influencer</option>
+      </select>
+      <input type="text" id="pUID" placeholder="UID" required>
+      <button type="submit">Submit</button>
+      <button type="button" onclick="closeModal('playerModal')">Close</button>
+    </form>
+  </div>
+
+  <!-- Edit Player Modal -->
+  <div id="editPlayerModal" class="modal">
+    <form onsubmit="savePlayerEdit(event)">
+      <h3>Edit Player</h3>
+      <input type="text" id="editName" placeholder="Name" required>
+      <select id="editDistrict" required>
+        <option value="">Select District</option>
+        <option value="Dhaka">Dhaka</option>
+        <option value="Chattogram">Chattogram</option>
+        <option value="Khulna">Khulna</option>
+        <option value="Barishal">Barishal</option>
+        <option value="Sylhet">Sylhet</option>
+        <option value="Rangpur">Rangpur</option>
+        <option value="Mymensingh">Mymensingh</option>
+        <option value="Rajshahi">Rajshahi</option>
+      </select>
+      <select id="editGender" required>
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <input type="number" id="editAge" placeholder="Age" required>
+      <select id="editProfession" required>
+        <option value="">Select Profession</option>
+        <option value="Job">Job</option>
+        <option value="Gamer">Gamer</option>
+        <option value="Student">Student</option>
+        <option value="Influencer">Influencer</option>
+      </select>
+      <input type="text" id="editUID" placeholder="UID" required>
+      <button type="submit">Save</button>
+      <button type="button" onclick="closeModal('editPlayerModal')">Close</button>
+    </form>
+  </div>
+
+  <!-- Slot Modal -->
+  <div id="slotModal" class="modal">
+    <form onsubmit="addSlot(event)">
+      <h3>Add Slot Purchase</h3>
+      <input type="date" id="slotDate" required>
+      <select id="slotType" required>
+        <option value="">Select Slot Type</option>
+        <option value="Blust">Blust</option>
+        <option value="Qualify">Qualify</option>
+        <option value="Scrim">Scrim</option>
+      </select>
+      <input type="time" id="slotTime" required>
+      <input type="number" id="slotAmount" placeholder="Amount" required>
+      <button type="submit">Add Slot</button>
+      <button type="button" onclick="closeModal('slotModal')">Close</button>
+    </form>
+  </div>
+
+  <!-- InGame Earn Modal -->
+  <div id="earnModal" class="modal">
+    <form onsubmit="addEarn(event)">
+      <h3>Add InGame Earn</h3>
+      <input type="number" id="earnAmount" placeholder="Amount" required>
+      <select id="earnType" required>
+        <option value="">Payment Type</option>
+        <option value="Bkash">Bkash</option>
+        <option value="Nagad">Nagad</option>
+        <option value="Rocket">Rocket</option>
+      </select>
+      <input type="date" id="earnDate" required>
+      <input type="time" id="earnTime" required>
+      <button type="submit">Add Earn</button>
+      <button type="button" onclick="closeModal('earnModal')">Close</button>
+    </form>
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <div id="confirmModal" class="modal">
+    <div class="modal-content" style="max-width: 350px; text-align: center;">
+      <h3>Confirm Action</h3>
+      <p style="margin: 15px 0 25px; color: #aaa;">Are you sure you want to delete this history entry?</p>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button id="finalDeleteBtn"
+          style="background: #f44336; color: white; padding: 12px; border-radius: 5px; border: none; font-weight: bold; flex: 1;">Delete</button>
+        <button onclick="closeModal('confirmModal')"
+          style="background: #333; color: white; padding: 12px; border-radius: 5px; border: none; font-weight: bold; flex: 1;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
